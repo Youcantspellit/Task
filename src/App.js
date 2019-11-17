@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Rocket from './components/Rocket/index.js';
+import { BG } from  './styles.js';
+import axios from 'axios';
+
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(()=>{
+    const fetchData = async () => {
+    const result = await axios(
+      'https://api.spacexdata.com/v2/rockets',
+    );
+    setData(result.data);
+  }
+  fetchData();
+  },[]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BG>
+      {data.map(item => (
+        
+        <Rocket key={item.rocketid} item={item}></Rocket>
+      ))}
+    </BG>
   );
 }
 
